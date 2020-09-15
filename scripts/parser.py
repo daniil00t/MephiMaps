@@ -3,10 +3,11 @@ import urllib.request
 import re
 
 # Global Vars
-Group = "Б20-515"
+Group = "Б20-505"
 Link = ""
 Names_arr = []
 Links_arr = []
+Error = False
 
 
 #init for start
@@ -21,7 +22,11 @@ def init(NamesLink, LinksLink):
 	Links_arr = Links.split("\n")
 	if Group in Names_arr:
 		Link = Links_arr[Names_arr.index(Group)]
+		Error = False
+	else:
+		Error = True
 	print(Group, " - ", Link)
+	return Error
 
 def Request(Link):
 	req = urllib.request.Request(Link, headers={'User-Agent': 'Mozilla/5.0'})
@@ -30,6 +35,7 @@ def Request(Link):
 	return soup
 
 def Filter(text):
+	# в виде исключения
 	if "Иностранный язык" in text:
 		return "Иностранный язык"
 	return text.replace("\xa0", " ").replace("\n", "")
@@ -61,6 +67,15 @@ def Parse(soup):
 
 
 if __name__ == "__main__":
-	init("NameGroups.txt", "LinksGroups.txt")
-	soup = Request(Link)
-	print(Parse(soup))
+	if not init("NameGroups.txt", "LinksGroups.txt"):
+		soup = Request(Link)
+		print(Parse(soup))
+	else:
+		print("Ошибка! Проверьте корректность введенных данных")
+
+
+# хочу обратиться к создателям сайта, а именно, кто писал модуль отображения расписания: за чтооооо!
+# вы же понимиаете, что вы создали костыль, а исправляется это за минуту..а мучался я с функцией Parse
+# очень долго и очень мучительно... спасибо, блин
+
+# Локаторы 
