@@ -3,7 +3,7 @@ import urllib.request
 import re
 
 # Global Vars
-Group = "Б20-505"
+Group = "Б20-514"
 Link = ""
 Names_arr = []
 Links_arr = []
