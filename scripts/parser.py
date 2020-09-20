@@ -3,7 +3,7 @@ import urllib.request
 import re
 
 # Global Vars
-Group = "Б20-514"
+Group = "Б20-56547"
 Link = ""
 Names_arr = []
 Links_arr = []
@@ -16,8 +16,8 @@ def init(NamesLink, LinksLink):
 	global Links_arr
 	global Link
 
-	Names = open("../data/" + NamesLink, encoding="utf-8").read()
-	Links = open("../data/" + LinksLink, encoding="utf-8").read()
+	Names = open("../data/parser/" + NamesLink, encoding="utf-8").read()
+	Links = open("../data/parser/" + LinksLink, encoding="utf-8").read()
 	Names_arr = Names.split("\n")
 	Links_arr = Links.split("\n")
 	if Group in Names_arr:
