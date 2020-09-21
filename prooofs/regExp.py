@@ -47,25 +47,25 @@ accident, sometimes on purpose (injected humour and the like).
 # 11.Найдите пустые строчки;
 
 # 1.
-print(1, re.findall(r'\d+', text))
+# print(1, re.findall(r'\d+', text))
 
-# 2.
-print(2, re.findall(r'[A-ZА-Я]{2,}', text))
+# # 2.
+# print(2, re.findall(r'[A-ZА-Я]{2,}', text))
 
-# 3.
-print(3, re.findall(r'[а-яА-Я]\d+', text))
+# # 3.
+# print(3, re.findall(r'[а-яА-Я]\d+', text))
 
-# 4.
-print(4, re.findall(r'\b[а-яА-Я]+\w+', text))
+# # 4.
+# print(4, re.findall(r'\b[а-яА-Я]+\w+', text))
 
-# 5.
-print(5, re.findall(r'\b[аеёиоуэюяaeoyui]+\w+', text))
+# # 5.
+# print(5, re.findall(r'\b[аеёиоуэюяaeoyui]+\w+', text))
 
-# 6.
-print(6, re.findall(r'\B\d+\w+', text))
+# # 6.
+# print(6, re.findall(r'\B\d+\w+', text))
 
-# 7.
-print(7, re.findall(r'\B\d+\w+', text))
+# # 7.
+# print(7, re.findall(r'\B\d+\w+', text))
 
 
 
@@ -77,7 +77,8 @@ strs = [
 	"КУ22777",
 	"Т22В7477",
 	"М227К19У9",
-	" С227НА777"
+	" С227НА777",
+	"Е101@777"
 ]
 for i in strs:
 	expPr = r'[АВЕКНОРСТУХ]{1}\d{3}[АВЕКНОРСТУХ]{2}\d{2,3}'
@@ -90,8 +91,9 @@ for i in strs:
 
 # # 2.
 
-# str2 = '''Он --- серо-буро-малиновая редиска!! 
-# >>>:-> 12 2223
-# А не кот. 
-# www.kot.ru'''
-# print(len(re.findall(r'[а-яА-Яa-zA-Z]+-?', str2)))
+str2 = '''Он --- серо-буро-малиновая редиска!! 
+>>>:-> 12 2223-
+А не кот. 
+www.kot.ru'''
+print(len(re.findall(r'[а-яА-Яa-zA-Z-]+-?', str2)))
+
