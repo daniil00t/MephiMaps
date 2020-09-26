@@ -93,5 +93,5 @@ def Filter(text, tamplate):
 			_text = _text.replace("".join(j), tamplate)
 	return _text
 
-for i in generateRegExps(data.dictWords, data.dictLetters):
-	print(i)
+# for i in generateRegExps(data.dictWords, data.dictLetters):
+# 	print(i)
