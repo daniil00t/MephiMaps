@@ -8,6 +8,21 @@ from flask import request
 from MephiMapsServer import app
 from MephiMapsServer import Parser
 from MephiMapsServer import Filter
+from MephiMapsServer import DB
+
+
+@app.after_request
+def add_header(r):
+	"""
+	Add headers to both force latest IE rendering engine or Chrome Frame,
+	and also to cache the rendered page for 10 minutes.
+	"""
+	r.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+	r.headers["Pragma"] = "no-cache"
+	r.headers["Expires"] = "0"
+	r.headers['Cache-Control'] = 'public, max-age=0'
+	return r
+
 
 @app.route("/")
 def Home():
@@ -40,6 +55,7 @@ def schedule():
 		parser = Parser("./MephiMapsServer/data/parser/Names.txt", "./MephiMapsServer/data/parser/Links.txt", Group)
 		# print(parser.Parse())
 		# print(parser.Parse())
+		print(*parser.Parse())
 		return render_template("index.html", content=str(parser.Parse()))
 		# else:
 		# 	print("Ошибка! Проверьте корректность введенных данных")
@@ -63,3 +79,31 @@ def filterGet():
 		error = 'Invalid req'
 		print("error")
 		return "Error"
+
+
+
+@app.route("/marks/get", methods=['GET', "POST"])
+def MarksGet():
+	db = DB("./MephiMapsServer/database.db")
+	arr = list(db.getData("Marks"))
+	print(arr)
+	# db.close()
+	return render_template("index.html", title="Marks", content=arr)
+
+@app.route("/schedules/get", methods=['GET', "POST"])
+def schedulesGet():
+	db = DB("./MephiMapsServer/database.db")
+	arr = list(db.getData("Schedules"))
+	print(arr)
+	# db.close()
+	return render_template("index.html", title="Schedules", content=arr)
+
+@app.route("/users/get", methods=['GET', "POST"])
+def usersGet():
+	db = DB("./MephiMapsServer/database.db")
+	arr = list(db.getData("Users"))
+	print(arr)
+	# db.close()
+	return render_template("index.html", title="Users", content=arr)
+
+
