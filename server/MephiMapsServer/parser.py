@@ -37,7 +37,7 @@ class Parser:
 		# в виде исключения
 		if "Иностранный язык" in text:
 			return "Иностранный язык"
-		return text.replace("\xa0", " ").replace("\n", "")
+		return text.replace("\xa0", " ").replace("\xd0", " ").replace("\n", "")
 
 	def Parse(self):
 		self.Link = self.getLink()

@@ -7,6 +7,7 @@ from flask import render_template
 from flask import request
 from MephiMapsServer import app
 from MephiMapsServer import Parser
+from MephiMapsServer import Filter
 
 @app.route("/")
 def Home():
@@ -20,8 +21,9 @@ def hello():
 		return "<option selected value=" + el +">" + el +"</option>"
 	__str = ""
 	_str = '''
+	<style>select{height:300px}</style>
 	<form action="/schedule/get" method="POST">
-		<select multiple name="group">
+		<select multiple name="group" height="100">
 		<option disabled>Выберите группу</option>"
 	'''
 	for i in Names_arr:
@@ -38,7 +40,7 @@ def schedule():
 		parser = Parser("./MephiMapsServer/data/parser/Names.txt", "./MephiMapsServer/data/parser/Links.txt", Group)
 		# print(parser.Parse())
 		# print(parser.Parse())
-		return "<p>" + str(parser.Parse()) + "</p>"
+		return render_template("index.html", content=str(parser.Parse()))
 		# else:
 		# 	print("Ошибка! Проверьте корректность введенных данных")
 	else:
@@ -47,8 +49,17 @@ def schedule():
 
 @app.route("/filter", methods=['GET', "POST"])
 def filter():
+	return '''
+	<form action="/filter/get" method="POST">
+		<input type="text" placeholder="text" name="text"/>
+		<input type="submit" value="filter"/>
+	</form>
+	'''
+@app.route("/filter/get", methods=['GET', "POST"])
+def filterGet():
 	if request.method == 'POST':
-		return "this module is filter"
+		return Filter(request.form['text'], "Consored!")
 	else:
 		error = 'Invalid req'
+		print("error")
 		return "Error"
