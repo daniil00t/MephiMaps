@@ -26,14 +26,14 @@ class DB:
 
 
 
-# def createTables(cur):
-# 	# c.execute('''CREATE TABLE Marks (iter real, content text, _date text, user text, place text)''')
-# 	cur.execute('''CREATE TABLE Marks
-#              (id INTEGER PRIMARY KEY, content text, _date date, user text, place text)''')
-# 	cur.execute('''CREATE TABLE Users
-#              (id INTEGER PRIMARY KEY AUTOINCREMENT, login text, password text, _date text, ban boolean, rating real)''')
-	# cur.execute('''CREATE TABLE Schedules
- #             (id INTEGER PRIMARY KEY, _group text, content text, lst_update date)''')
+def createTables(cur):
+	# c.execute('''CREATE TABLE Marks (iter real, content text, _date text, user text, place text)''')
+	cur.execute('''CREATE TABLE Marks
+             (id INTEGER PRIMARY KEY, content text, _date date, user text, place text)''')
+	cur.execute('''CREATE TABLE Users
+             (id INTEGER PRIMARY KEY AUTOINCREMENT, login text, password text, _date text, ban boolean, rating real)''')
+	cur.execute('''CREATE TABLE Schedules
+             (id INTEGER PRIMARY KEY, _group text, content text, lst_update date)''')
 
 	
 
@@ -55,11 +55,12 @@ class DB:
 
 
 # db = DB("database.db")
-# db.insertSchedule({
-# 	"content": "[[sdfsdf]]",
-# 	"_group": "И20-122"
+# db.insertMark({
+# 	"content": "dkfjjvbsdfsdfg dfg",
+# 	"user": "И20-122",
+# 	"place": "F-100"
 # })
-# for i in db.getData("Schedules"):
+# for i in db.getData("Marks"):
 # 	print(i)
 # db.close()
 

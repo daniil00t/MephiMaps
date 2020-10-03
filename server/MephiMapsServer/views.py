@@ -74,7 +74,7 @@ def filter():
 @app.route("/filter/get", methods=['GET', "POST"])
 def filterGet():
 	if request.method == 'POST':
-		return Filter(request.form['text'], "Consored!")
+		return Filter(request.form['text'], "Censored!")
 	else:
 		error = 'Invalid req'
 		print("error")
@@ -82,13 +82,18 @@ def filterGet():
 
 
 
-@app.route("/marks/get", methods=['GET', "POST"])
+@app.route("/marks/get/", methods=['GET', "POST"])
 def MarksGet():
 	db = DB("./MephiMapsServer/database.db")
 	arr = list(db.getData("Marks"))
-	print(arr)
-	# db.close()
-	return render_template("index.html", title="Marks", content=arr)
+	db.close()
+	res = ""
+	for j in arr:
+		for i in j:
+			res += f"{i}##"
+		res = res[:-2]
+		res += "&&"
+	return res[:-3]
 
 @app.route("/schedules/get", methods=['GET', "POST"])
 def schedulesGet():
@@ -105,5 +110,3 @@ def usersGet():
 	print(arr)
 	# db.close()
 	return render_template("index.html", title="Users", content=arr)
-
-
