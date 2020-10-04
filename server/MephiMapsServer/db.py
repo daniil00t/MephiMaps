@@ -17,6 +17,8 @@ class DB:
 	def insertSchedule(self, data):
 		self.cur.execute("INSERT OR IGNORE INTO Schedules (_group, content, lst_update) VALUES (?, ?, ?)", (data["_group"], data['content'], str(datetime.datetime.now())))
 
+
+		
 	def getData(self, table):
 		return self.cur.execute(f"SELECT * FROM {table} ORDER BY id")
 

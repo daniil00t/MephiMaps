@@ -1,2 +1,9 @@
 ./Media
 ./build
+# Ignoring all except Unity/Mephi Maps/Assets/
+*
+!Unity
+!Unity/Mephi Maps
+!Unity/Mephi Maps/Assets
+!Unity/Mephi Maps/Assets/scripts
+!Unity/Mephi Maps/Assets/scripts/*
