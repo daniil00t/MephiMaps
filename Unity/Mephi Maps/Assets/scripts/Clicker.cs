@@ -1,6 +1,9 @@
-﻿using System.Collections;
+﻿using System;
+using System.Net;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using _Main_;
 
 /* Copyright (C) Xenfinity LLC - All Rights Reserved
  * Unauthorized copying of this file, via any medium is strictly prohibited
@@ -8,31 +11,70 @@ using UnityEngine;
  * Written by Bilal Itani <bilalitani1@gmail.com>, June 2017
  */
 
-public class Clicker : MonoBehaviour
+public class Clicker : Main
 {
     private Ray ray;
     private RaycastHit hit;
-    public float force = 5;
-
+    public static GameObject FindObject(GameObject parent, string name)
+    {
+        Transform[] trs = parent.GetComponentsInChildren<Transform>(true);
+        foreach (Transform t in trs)
+        {
+            if (t.name == name)
+            {
+                return t.gameObject;
+            }
+        }
+        return null;
+    }
     private void Update()
     {
         ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out hit))
         {
             if (Input.GetMouseButtonDown(0))
-                Debug.Log(hit.collider.name);
+            {
+                string name = hit.collider.name;
+                if(System.Text.RegularExpressions.Regex.Split(name, "_")[0] == "Mark")
+                {
+                    ActiveMark(Int32.Parse(Char.ToString(name[name.Length - 1])));
+                }
+                else
+                {
+                    try
+                    {
+                        if (hit.collider.gameObject.transform.parent.gameObject.name == "Map")
+                        {
+                            ActiveChangeFloor(hit.collider.name);
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        print(name);
+                    }
+                    
+                }
+            }
+                
         }
 
     }
-
-    private void PrintName(GameObject go)
+    private void ActiveMark(int id)
     {
-        print(go.name);
+        //int id = Int32.Parse(Char.ToString(name[name.Length - 1]));
+        GameObject tempCntEl = FindObject(GameObject.Find("Mark_Panels"), $"Mark_Panel_{id}");
+        //print($"MarkPanel_{id}");
+        print(name);
+        //print(tempCntEl.name);
+        tempCntEl.SetActive(true);
     }
-
-    private void LaunchIntoAir(Rigidbody rig)
+    private void ActiveChangeFloor(string name)
     {
-        rig.AddForce(rig.transform.up * force, ForceMode.Impulse);
+        //int id = Int32.Parse(Char.ToString(name[name.Length - 1]));
+        GameObject el = FindObject(GameObject.Find("2D"), $"ChangeFloor_{name}");
+        //print($"MarkPanel_{id}");
+        print(name);
+        //print(tempCntEl.name);
+        el.SetActive(true);
     }
-
 }

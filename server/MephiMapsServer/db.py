@@ -17,6 +17,35 @@ class DB:
 	def insertSchedule(self, data):
 		self.cur.execute("INSERT OR IGNORE INTO Schedules (_group, content, lst_update) VALUES (?, ?, ?)", (data["_group"], data['content'], str(datetime.datetime.now())))
 
+	def updateMark(self, id, data):
+		try:
+			self.cur.execute('''UPDATE OR IGNORE Marks SET content = ? WHERE id = ?''', (data["content"], id))
+		except Exception as e:
+			try:
+				self.cur.execute('''UPDATE OR IGNORE Marks SET user = ? WHERE id = ?''', (data["user"], id))
+			except Exception as e:
+				self.cur.execute('''UPDATE OR IGNORE Marks SET place = ? WHERE id = ?''', (data["place"], id))
+		
+	def updateUser(self, id, data):
+		try:
+			self.cur.execute('''UPDATE OR IGNORE Users SET login = ? WHERE id = ?''', (data["login"], id))
+		except Exception as e:
+			try:
+				self.cur.execute('''UPDATE OR IGNORE Users SET password = ? WHERE id = ?''', (data["password"], id))
+			except Exception as e:
+				try:
+					self.cur.execute('''UPDATE OR IGNORE Users SET rating = ? WHERE id = ?''', (data["rating"], id))
+				except Exception as e:
+					self.cur.execute('''UPDATE OR IGNORE Users SET ban = ? WHERE id = ?''', (data["ban"], id))
+		
+	def updateSchedule(self, id, data):
+		try:
+			self.cur.execute('''UPDATE OR IGNORE Schedules SET _group = ? WHERE id = ?''', (data["_group"], id))
+			self.cur.execute('''UPDATE OR IGNORE Schedules SET lst_update = ? WHERE id = ?''', (str(datetime.datetime.now()), id))
+		except Exception as e:
+			self.cur.execute('''UPDATE OR IGNORE Schedules SET content = ? WHERE id = ?''', (data["content"], id))
+			self.cur.execute('''UPDATE OR IGNORE Schedules SET lst_update = ? WHERE id = ?''', (str(datetime.datetime.now()), id))
+		
 
 		
 	def getData(self, table):
@@ -39,13 +68,6 @@ def createTables(cur):
 
 	
 
-	
-# def getData(c):
-# 	return c.execute('SELECT * FROM Schedule ORDER BY iter')
-
-# setTestData(c)
-# for i in getData(c):
-# 	print(i)
 
 # conn = sqlite3.connect("database.db")
 # cur = conn.cursor()
@@ -54,13 +76,13 @@ def createTables(cur):
 # conn.close()
 
 
-
+#
+#	Здесь мы можем подредактировать таблицу
+#
 
 # db = DB("database.db")
-# db.insertMark({
-# 	"content": "dkfjjvbsdfsdfg dfg",
-# 	"user": "И20-122",
-# 	"place": "F-100"
+# db.updateMark(5, {
+# 	"place": "V-"
 # })
 # for i in db.getData("Marks"):
 # 	print(i)

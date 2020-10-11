@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 
 
@@ -12,20 +13,45 @@ using TMPro;
 public class Marks : Structions
 {
     public GameObject temp;
+    public GameObject tempCnt;
     public GameObject [] corpus;
     private Mark[] ARRAY_MARKS;
     public void initMarks(Mark[] arr)
     {
         this.ARRAY_MARKS = arr;
-        Debug.Log(arr[0].id);
+    }
+    public struct PositionMark
+    {
+        public Vector3 Pos;
+        public Vector3 Size;
+        public PositionMark(Vector3 Pos, Vector3 Size)
+        {
+            this.Pos = Pos;
+            this.Size = Size;
+        }
+        public Vector3 getPosition()
+        {
+            Vector3 res = new Vector3(0, 0, 0);
+            res.y = Pos.y * 2f + 7f;
+            res = new Vector3(Pos.x, res.y, Pos.z);
+            return res;
+        }
     }
     public void start()
     {
         for (int i = 0; i < this.ARRAY_MARKS.Length; i++)
         {
+            Mark mark = ARRAY_MARKS[i];
             temp = GameObject.Find("MarkLabel");
+            tempCnt = GameObject.Find("Mark_Panel");
+
+            string[] _str = System.Text.RegularExpressions.Regex.Split(mark.place, "-");
+            GameObject building = GameObject.Find(_str[0]);
+            PositionMark pos_building = new PositionMark(building.transform.position, building.transform.localScale);
+            /*pos_building.Pos = building.transform.position;
+            pos_building.Size = building.transform.localScale;*/
             //temp.GetComponentsInChildren<GameObject>()[1].SetActive(false);
-            
+
             //corpus = GameObject.Find("Main").GetComponentsInChildren<GameObject>();
 
             //GameObject Origin = gameObject;
@@ -39,12 +65,23 @@ public class Marks : Structions
             //Material1.color = Color.red;
 
             //Debug.Log(_Marks.Length);
-            Mark mark = ARRAY_MARKS[i];
-            Debug.Log(mark.id);
-            GameObject go = Instantiate(temp, temp.transform.position + new Vector3(-10, -10f , 10 * (i + 1) * 3), temp.transform.rotation).gameObject;
+
+            //Debug.Log(pos_building.getPosition());
+            GameObject go = Instantiate(temp, pos_building.getPosition(), temp.transform.rotation).gameObject;
+            GameObject goCnt = Instantiate(tempCnt).gameObject;
+
             go.GetComponentsInChildren<Transform>()[1].GetComponent<TextMeshPro>().SetText($"{mark.id}: {mark.cnt}, {mark.place}");
+
+            goCnt.GetComponentsInChildren<Transform>()[1].GetComponentsInChildren<Transform>()[1].GetComponent<Text>().text = mark.cnt;
+            goCnt.GetComponentsInChildren<Transform>()[1].GetComponentsInChildren<Transform>()[2].GetComponent<Text>().text = mark.login;
+            goCnt.GetComponentsInChildren<Transform>()[1].GetComponentsInChildren<Transform>()[3].GetComponent<Text>().text = mark._date;
+            goCnt.GetComponentsInChildren<Transform>()[1].GetComponentsInChildren<Transform>()[4].GetComponent<Text>().text = mark.place;
+            go.name = $"Mark_{mark.id}";
+            goCnt.name = $"Mark_Panel_{mark.id}";
             //go.GetComponentsInChildren<Transform>()[1].GetComponent<Renderer>().enabled = true;
             go.SetActive(true);
+            goCnt.transform.parent = GameObject.Find("Mark_Panels").transform;
+            goCnt.SetActive(false);
             /*Transform[] allChildren = go.GetComponentsInChildren<Transform>();
             foreach (Transform child in allChildren)
             {
@@ -61,6 +98,7 @@ public class Marks : Structions
             //GameObject tmp = Instantiate(Origin);
             //tmp.transform.position = new Vector3(-1313.3f, 60.4f, -189.5f);
             if (i == this.ARRAY_MARKS.Length - 1) temp.SetActive(false);
+            if (i == this.ARRAY_MARKS.Length - 1) tempCnt.SetActive(false);
         }
 
     }
