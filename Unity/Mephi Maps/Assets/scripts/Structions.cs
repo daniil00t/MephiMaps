@@ -12,4 +12,8 @@ public class Structions : MonoBehaviour
         public string login;
         public string place;
     }
+    public void generateGraph(GameObject Map, GameObject Paths)
+    {
+
+    }
 }

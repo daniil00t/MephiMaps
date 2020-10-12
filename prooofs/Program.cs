@@ -92,7 +92,14 @@ namespace HelloWorld
 
             /*N-мерные массивы*/
             int[,] nums3 = new int[2, 3] { { 0, 1, 2 }, { 3, 4, 5 } };
-            
+            public const int SIZE = 6;
+            public float[,] matrix = new float[SIZE, SIZE]; // матрица связей
+            public float[] a = new float[SIZE]; // посещенные вершины
+            public float[] d = new float[SIZE]; // минимальное расстояние
+            public float save;//временное хранение различных величин
+            public int begin_index = 0;//задаем индекс начальной вершины, от которой будем искать путь
+            public int min;
+            public int minindex;
             /*массив массивов*/
             /*int[][] numbers = new int[3][];
             numbers[0] = new int[] { 1, 2 };

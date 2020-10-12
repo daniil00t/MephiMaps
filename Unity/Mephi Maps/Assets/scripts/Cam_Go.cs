@@ -21,6 +21,7 @@ public class Cam_Go : MonoBehaviour
     float camSens = 0.20f; //How sensitive it with mouse
     private Vector3 lastMouse = new Vector3(255, 255, 255); //kind of in the middle of the screen, rather than at the top (play)
     private float totalRun = 1.0f;
+    public bool ActiveCorpuses = false;
 
 
     public void Start()
@@ -42,7 +43,7 @@ public class Cam_Go : MonoBehaviour
 
         //Keyboard commands
         float f = 0.0f;
-        Vector3 p = GetBaseInput();
+        Vector3 p = GetBaseInput(ActiveCorpuses);
 
 
         if (Input.GetKey(KeyCode.LeftShift))
@@ -50,7 +51,14 @@ public class Cam_Go : MonoBehaviour
             totalRun += Time.deltaTime;
             p = p * totalRun * shiftAdd;
             p.x = Mathf.Clamp(p.x, -maxShift, maxShift);
-            p.z = Mathf.Clamp(p.z, -maxShift, maxShift);
+            if (!ActiveCorpuses)
+            {
+                p.z = Mathf.Clamp(p.z, -maxShift, maxShift);
+            }
+            else
+            {
+                p.y = Mathf.Clamp(p.y, -maxShift, maxShift);
+            }
         }
         else
         {
@@ -62,30 +70,43 @@ public class Cam_Go : MonoBehaviour
         Vector3 newPosition = transform.position;
        
         transform.Translate(p);
-        newPosition.x = transform.position.x;
         newPosition.z = transform.position.z;
+        if (!ActiveCorpuses)
+        {
+            newPosition.x = transform.position.x;
+        }
+        else
+        {
+            newPosition.y = transform.position.y;
+        }
         transform.position = newPosition;
 
     }
 
-    private Vector3 GetBaseInput()
+    private Vector3 GetBaseInput(bool flag)
     { //returns the basic values, if it's 0 than it's not active.
         Vector3 p_Velocity = new Vector3();
-        if (Input.GetKey(KeyCode.W))
+        if (!flag)
         {
-            p_Velocity += new Vector3(0, 0, 1);
+            if (Input.GetKey(KeyCode.W))
+                p_Velocity += new Vector3(0, 0, 1);
+            if (Input.GetKey(KeyCode.S))
+                p_Velocity += new Vector3(0, 0, -1);
+            if (Input.GetKey(KeyCode.A))
+                p_Velocity += new Vector3(-1, 0, 0);
+            if (Input.GetKey(KeyCode.D))
+                p_Velocity += new Vector3(1, 0, 0);
         }
-        if (Input.GetKey(KeyCode.S))
+        else
         {
-            p_Velocity += new Vector3(0, 0, -1);
-        }
-        if (Input.GetKey(KeyCode.A))
-        {
-            p_Velocity += new Vector3(-1, 0, 0);
-        }
-        if (Input.GetKey(KeyCode.D))
-        {
-            p_Velocity += new Vector3(1, 0, 0);
+            if (Input.GetKey(KeyCode.W))
+                p_Velocity += new Vector3(0, 1, 0);
+            if (Input.GetKey(KeyCode.S))
+                p_Velocity += new Vector3(0, -1, 0);
+            if (Input.GetKey(KeyCode.A))
+                p_Velocity += new Vector3(-1, 0, 0);
+            if (Input.GetKey(KeyCode.D))
+                p_Velocity += new Vector3(1, 0, 0);
         }
         return p_Velocity;
     }

@@ -47,10 +47,18 @@ public class Clicker : Main
                         {
                             ActiveChangeFloor(hit.collider.name);
                         }
+                        else if(hit.collider.gameObject.transform.parent.gameObject.transform.parent.gameObject.name == "Map")
+                        {
+                            ActiveChangeFloor(hit.collider.gameObject.transform.parent.gameObject.name);
+                        }
+                        else
+                        {
+                            print($"{hit.collider.gameObject.transform.parent.gameObject.name}, {hit.collider.gameObject.transform.parent.gameObject.transform.parent.gameObject.name}");
+                        }
                     }
                     catch (Exception e)
                     {
-                        print(name);
+                        print(e);
                     }
                     
                 }
@@ -64,17 +72,23 @@ public class Clicker : Main
         //int id = Int32.Parse(Char.ToString(name[name.Length - 1]));
         GameObject tempCntEl = FindObject(GameObject.Find("Mark_Panels"), $"Mark_Panel_{id}");
         //print($"MarkPanel_{id}");
-        print(name);
         //print(tempCntEl.name);
         tempCntEl.SetActive(true);
     }
     private void ActiveChangeFloor(string name)
     {
         //int id = Int32.Parse(Char.ToString(name[name.Length - 1]));
-        GameObject el = FindObject(GameObject.Find("2D"), $"ChangeFloor_{name}");
-        //print($"MarkPanel_{id}");
-        print(name);
-        //print(tempCntEl.name);
-        el.SetActive(true);
+        try
+        {
+            GameObject el = FindObject(GameObject.Find("2D"), $"ChangeFloor_{name}");
+            //print($"MarkPanel_{id}");
+            //print(tempCntEl.name);
+            el.SetActive(true);
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"Кажется, у нас пока нет 2d-карт для этого объекта:( [{e}]");
+        }
+        
     }
 }
