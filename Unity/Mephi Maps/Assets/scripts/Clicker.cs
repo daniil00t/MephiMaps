@@ -34,6 +34,7 @@ public class Clicker : Main
         {
             if (Input.GetMouseButtonDown(0))
             {
+                print(hit.point);
                 string name = hit.collider.name;
                 if(System.Text.RegularExpressions.Regex.Split(name, "_")[0] == "Mark")
                 {

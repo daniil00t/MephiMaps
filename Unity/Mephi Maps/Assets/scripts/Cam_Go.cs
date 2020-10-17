@@ -33,7 +33,11 @@ public class Cam_Go : MonoBehaviour
     void Update()
     {
 
-       
+        if (!ActiveCorpuses)
+        {
+            toggleMap(!ActiveCorpuses);
+            ActiveCorpuses = !false;
+        }
        /* lastMouse = Input.mousePosition - lastMouse;
         lastMouse = new Vector3(-lastMouse.y * camSens, lastMouse.x * camSens, 0);
         lastMouse = new Vector3(transform.eulerAngles.x + lastMouse.x, transform.eulerAngles.y + lastMouse.y, 0);
@@ -43,7 +47,7 @@ public class Cam_Go : MonoBehaviour
 
         //Keyboard commands
         float f = 0.0f;
-        Vector3 p = GetBaseInput(ActiveCorpuses);
+        Vector3 p = GetBaseInput();
 
 
         if (Input.GetKey(KeyCode.LeftShift))
@@ -51,14 +55,7 @@ public class Cam_Go : MonoBehaviour
             totalRun += Time.deltaTime;
             p = p * totalRun * shiftAdd;
             p.x = Mathf.Clamp(p.x, -maxShift, maxShift);
-            if (!ActiveCorpuses)
-            {
-                p.z = Mathf.Clamp(p.z, -maxShift, maxShift);
-            }
-            else
-            {
-                p.y = Mathf.Clamp(p.y, -maxShift, maxShift);
-            }
+            p.z = Mathf.Clamp(p.z, -maxShift, maxShift);
         }
         else
         {
@@ -71,43 +68,38 @@ public class Cam_Go : MonoBehaviour
        
         transform.Translate(p);
         newPosition.z = transform.position.z;
-        if (!ActiveCorpuses)
-        {
-            newPosition.x = transform.position.x;
-        }
-        else
-        {
-            newPosition.y = transform.position.y;
-        }
+        newPosition.x = transform.position.x;
         transform.position = newPosition;
 
     }
 
-    private Vector3 GetBaseInput(bool flag)
+    private Vector3 GetBaseInput()
     { //returns the basic values, if it's 0 than it's not active.
         Vector3 p_Velocity = new Vector3();
-        if (!flag)
-        {
-            if (Input.GetKey(KeyCode.W))
+
+        if (Input.GetKey(KeyCode.W))
                 p_Velocity += new Vector3(0, 0, 1);
-            if (Input.GetKey(KeyCode.S))
+        if (Input.GetKey(KeyCode.S))
                 p_Velocity += new Vector3(0, 0, -1);
-            if (Input.GetKey(KeyCode.A))
+        if (Input.GetKey(KeyCode.A))
                 p_Velocity += new Vector3(-1, 0, 0);
-            if (Input.GetKey(KeyCode.D))
+        if (Input.GetKey(KeyCode.D))
                 p_Velocity += new Vector3(1, 0, 0);
+
+        return p_Velocity;
+    }
+    public void toggleMap(bool flag)
+    {
+        if (flag) {
+            transform.position += new Vector3(0, 160, 0);
+            transform.rotation = Quaternion.Euler(75f, 90f, 0f);
         }
         else
         {
-            if (Input.GetKey(KeyCode.W))
-                p_Velocity += new Vector3(0, 1, 0);
-            if (Input.GetKey(KeyCode.S))
-                p_Velocity += new Vector3(0, -1, 0);
-            if (Input.GetKey(KeyCode.A))
-                p_Velocity += new Vector3(-1, 0, 0);
-            if (Input.GetKey(KeyCode.D))
-                p_Velocity += new Vector3(1, 0, 0);
+            transform.position -= new Vector3(0, 160, 0);
+            transform.rotation = Quaternion.Euler(15, 90f, 0f);
         }
-        return p_Velocity;
+        
     }
+
 }

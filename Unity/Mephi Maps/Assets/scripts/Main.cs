@@ -55,7 +55,7 @@ namespace _Main_
             
             Debug.Log("Programm is running!");
             StartCoroutine(GetRequest("http://localhost:5556/marks/get"));
-            
+            generateGraph(GameObject.Find("Map"), GameObject.Find("Paths"));
         }
     }
 }
