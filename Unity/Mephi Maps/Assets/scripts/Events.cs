@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 using System.Collections;
 
-public class Events : MonoBehaviour
+public class Events : Cam_Go
 {
 	public Button thisButton;
 
@@ -16,6 +16,16 @@ public class Events : MonoBehaviour
 	{
 		Debug.Log("You have clicked the button!");
 		print(thisButton.gameObject.transform.parent.gameObject.name);
-		thisButton.gameObject.transform.parent.gameObject.transform.parent.gameObject.SetActive(false);
+        try
+        {
+			thisButton.gameObject.transform.parent.gameObject.transform.parent.gameObject.SetActive(false);
+			toggleMapToCamera(false);
+
+		}
+        catch (System.Exception e)
+        {
+			print(e);
+        }
+		
 	}
 }

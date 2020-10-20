@@ -28,7 +28,7 @@ public class Navigate : Structions
         // Шаг алгоритма
         do
         {
-            minindex = 10000;//индекс вершины с минимальным весом
+            minindex = 1000;//индекс вершины с минимальным весом
             min = INF;// мин вес
             for (int i = 0; i < SIZE; i++)
             { // Если вершину ещё не обошли и вес меньше min
@@ -56,7 +56,7 @@ public class Navigate : Structions
                 }
                 a[minindex] = 0;
             }
-        } while (minindex < 10000);
+        } while (minindex < 1000);
 
     }
 

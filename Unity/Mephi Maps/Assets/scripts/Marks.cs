@@ -48,6 +48,7 @@ public class Marks : Structions
             string[] _str = System.Text.RegularExpressions.Regex.Split(mark.place, "-");
             GameObject building = GameObject.Find(_str[0]);
             PositionMark pos_building = new PositionMark(building.transform.position, building.transform.localScale);
+
             /*pos_building.Pos = building.transform.position;
             pos_building.Size = building.transform.localScale;*/
             //temp.GetComponentsInChildren<GameObject>()[1].SetActive(false);

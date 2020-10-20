@@ -32,12 +32,6 @@ public class Cam_Go : MonoBehaviour
 
     void Update()
     {
-
-        if (!ActiveCorpuses)
-        {
-            toggleMap(!ActiveCorpuses);
-            ActiveCorpuses = !false;
-        }
        /* lastMouse = Input.mousePosition - lastMouse;
         lastMouse = new Vector3(-lastMouse.y * camSens, lastMouse.x * camSens, 0);
         lastMouse = new Vector3(transform.eulerAngles.x + lastMouse.x, transform.eulerAngles.y + lastMouse.y, 0);
@@ -88,16 +82,17 @@ public class Cam_Go : MonoBehaviour
 
         return p_Velocity;
     }
-    public void toggleMap(bool flag)
+    public void toggleMapToCamera(bool flag)
     {
+        GameObject Camera = GameObject.Find("Main Camera");
         if (flag) {
-            transform.position += new Vector3(0, 160, 0);
-            transform.rotation = Quaternion.Euler(75f, 90f, 0f);
+            Camera.transform.position = new Vector3(120, 300, 520);
+            Camera.transform.rotation = Quaternion.Euler(75f, 90f, 0f);
         }
         else
         {
-            transform.position -= new Vector3(0, 160, 0);
-            transform.rotation = Quaternion.Euler(15, 90f, 0f);
+            Camera.transform.position = new Vector3(-304, 140, 536);
+            Camera.transform.rotation = Quaternion.Euler(15, 90f, 0f);
         }
         
     }
