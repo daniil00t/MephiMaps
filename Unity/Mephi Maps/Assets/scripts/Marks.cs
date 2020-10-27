@@ -14,8 +14,20 @@ public class Marks : Structions
 {
     public GameObject temp;
     public GameObject tempCnt;
-    public GameObject [] corpus;
+    public GameObject[] corpus;
     private Mark[] ARRAY_MARKS;
+    public static GameObject FindObject(GameObject parent, string name)
+    {
+        Transform[] trs = parent.GetComponentsInChildren<Transform>(true);
+        foreach (Transform t in trs)
+        {
+            if (t.name == name)
+            {
+                return t.gameObject;
+            }
+        }
+        return null;
+    }
     public void initMarks(Mark[] arr)
     {
         this.ARRAY_MARKS = arr;
@@ -42,73 +54,28 @@ public class Marks : Structions
         for (int i = 0; i < this.ARRAY_MARKS.Length; i++)
         {
             Mark mark = ARRAY_MARKS[i];
-            temp = GameObject.Find("MarkLabel");
-            tempCnt = GameObject.Find("Mark_Panel");
+            temp = GameObject.Find("Mark_Labels/MarkLabel");
+            tempCnt = FindObject(GameObject.Find("Mark_Panels"), "Mark_Panel");
 
             string[] _str = System.Text.RegularExpressions.Regex.Split(mark.place, "-");
             GameObject building = GameObject.Find(_str[0]);
             PositionMark pos_building = new PositionMark(building.transform.position, building.transform.localScale);
-
             /*pos_building.Pos = building.transform.position;
             pos_building.Size = building.transform.localScale;*/
             //temp.GetComponentsInChildren<GameObject>()[1].SetActive(false);
 
-            //corpus = GameObject.Find("Main").GetComponentsInChildren<GameObject>();
-
-            //GameObject Origin = gameObject;
-            //gameObject.GetComponent<Renderer>().enabled = false;
-
-
-
-            //Debug.Log(gameObject.transform.position);
-            //Debug.Log(gameObject.transform.localScale);
-            //Material Material1;
-            //Material1.color = Color.red;
-
-            //Debug.Log(_Marks.Length);
-
-            //Debug.Log(pos_building.getPosition());
             try
             {
-                GameObject go = Instantiate(temp, pos_building.getPosition(), temp.transform.rotation).gameObject;
-                GameObject goCnt = Instantiate(tempCnt).gameObject;
-
-                go.GetComponentsInChildren<Transform>()[1].GetComponent<TextMeshPro>().SetText($"{mark.id}: {mark.cnt}, {mark.place}");
-
-                goCnt.GetComponentsInChildren<Transform>()[1].GetComponentsInChildren<Transform>()[1].GetComponent<Text>().text = mark.cnt;
-                goCnt.GetComponentsInChildren<Transform>()[1].GetComponentsInChildren<Transform>()[2].GetComponent<Text>().text = mark.login;
-                goCnt.GetComponentsInChildren<Transform>()[1].GetComponentsInChildren<Transform>()[3].GetComponent<Text>().text = mark._date;
-                goCnt.GetComponentsInChildren<Transform>()[1].GetComponentsInChildren<Transform>()[4].GetComponent<Text>().text = mark.place;
-                go.name = $"Mark_{mark.id}";
-                goCnt.name = $"Mark_Panel_{mark.id}";
-                //go.GetComponentsInChildren<Transform>()[1].GetComponent<Renderer>().enabled = true;
-                go.SetActive(true);
-                goCnt.transform.parent = GameObject.Find("Mark_Panels").transform;
-                goCnt.SetActive(false);
-                if (i == this.ARRAY_MARKS.Length - 1) temp.SetActive(false);
-                if (i == this.ARRAY_MARKS.Length - 1) tempCnt.SetActive(false);
+                renderMark(i, temp, mark, pos_building);
+                renderMarkPanel(i, tempCnt, mark);
+               
             }
             catch (System.Exception e)
             {
                 print(e);
             }
-            
-            /*Transform[] allChildren = go.GetComponentsInChildren<Transform>();
-            foreach (Transform child in allChildren)
-            {
-                TextMeshPro textmeshPro = GetComponent<TextMeshPro>();
-                textmeshPro.SetText("The first number is {0} and the 2nd is {1:2} and the 3rd is {3:0}.", 4, 6.345f, 3.5f);
-                child.gameObject.GetComponent<TextMeshPro>().text = "Danya";
-                child.gameObject.GetComponent<Renderer>().enabled = true;
-                textmeshPro.gameObject.GetComponent<Renderer>().enabled = true;
-            }*/
 
-            //gameObject.GetComponent<Renderer>().enabled = true;
-            //go.AddComponent<DestroyAfterPosition>();
 
-            //GameObject tmp = Instantiate(Origin);
-            //tmp.transform.position = new Vector3(-1313.3f, 60.4f, -189.5f);
-            
         }
 
     }
@@ -118,4 +85,31 @@ public class Marks : Structions
         Debug.Log("Module Marks is works!");
     }
 
+    public void renderMark(int i, GameObject _tamplate, Mark mark, PositionMark pos_building)
+    {
+        GameObject go = Instantiate(_tamplate, pos_building.getPosition(), _tamplate.transform.rotation).gameObject;
+        go.GetComponentsInChildren<Transform>()[1].GetComponent<TextMeshPro>().SetText($"{mark.id}: {mark.cnt}, {mark.place}");
+        go.name = $"Mark_{mark.id}";
+        go.transform.parent = GameObject.Find("Mark_Labels").transform;
+        go.SetActive(true);
+        if (i == this.ARRAY_MARKS.Length - 1) _tamplate.SetActive(false);
+    }
+    public void renderMarkPanel(int i, GameObject _tamplate, Mark mark)
+    {
+        print($"i: {i}, Tamplate: {_tamplate.name}, data: [{mark.id}, {mark.cnt}]");
+        GameObject goCnt = Instantiate(_tamplate).gameObject;
+        goCnt.GetComponentsInChildren<Transform>()[1].GetComponentsInChildren<Transform>()[1].GetComponent<Text>().text = mark.cnt;
+        goCnt.GetComponentsInChildren<Transform>()[1].GetComponentsInChildren<Transform>()[2].GetComponent<Text>().text = mark.login;
+        goCnt.GetComponentsInChildren<Transform>()[1].GetComponentsInChildren<Transform>()[3].GetComponent<Text>().text = mark._date;
+        goCnt.GetComponentsInChildren<Transform>()[1].GetComponentsInChildren<Transform>()[4].GetComponent<Text>().text = mark.place;
+
+        goCnt.name = $"Mark_Panel_{mark.id}";
+        //go.GetComponentsInChildren<Transform>()[1].GetComponent<Renderer>().enabled = true;
+
+        goCnt.transform.parent = GameObject.Find("Mark_Panels").transform;
+        
+        goCnt.SetActive(false);
+
+        if (i == this.ARRAY_MARKS.Length - 1) _tamplate.SetActive(false);
+    }
 }

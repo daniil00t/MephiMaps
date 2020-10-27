@@ -6,7 +6,6 @@ using UnityEngine;
 using UnityEngine.Networking;
 
 
-
 namespace _Main_
 {
     public class Main : Marks
@@ -50,12 +49,47 @@ namespace _Main_
                 _mark.start();
             }
         }
+        public IEnumerator GetWeather(string uri)
+        {
+            UnityWebRequest uwr = UnityWebRequest.Get(uri);
+            yield return uwr.SendWebRequest();
+
+            if (uwr.isNetworkError)
+            {
+                Debug.Log("Error While Sending: " + uwr.error);
+            }
+            else
+            {
+                string result = uwr.downloadHandler.text;
+                
+            }
+        }
         private void Start()
         {
             
             Debug.Log("Programm is running!");
             StartCoroutine(GetRequest("http://localhost:5556/marks/get"));
-            generateGraph(GameObject.Find("Map"), GameObject.Find("Paths"));
+            string urlWeather = "https://api.weather.yandex.ru/v2/informers?lat=55.650065057073256&lon=37.66450278636252";
+            //[55.650065057073256,37.66450278636252]
+
+            Dictionary<string, string> headers = new Dictionary<string, string>();
+            headers.Add("X-Yandex-API-Key", "7c5d2aac-973d-40ef-816a-e6b0173893c1");
+
+            WWW www = new WWW(urlWeather, new Byte[0], headers);
+            Debug.Log($"-----------------Weather: {www.text}--------------");
+/*            {
+                if (string.IsNullOrEmpty(www.error))
+                {
+                    
+                    
+                }
+                else
+                {
+                    Debug.LogError("Error: " + www.error);
+                }
+            }*/
+            
+            //generateGraph(GameObject.Find("Map"), GameObject.Find("Paths"));
         }
     }
 }

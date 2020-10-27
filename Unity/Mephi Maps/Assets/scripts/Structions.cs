@@ -1,12 +1,22 @@
-﻿using System;
+﻿using EventsControll;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using UnityEngine;
+using EventsControll;
 
-public class Structions : MonoBehaviour
+public class Structions : Events
 {
     public float INF = Single.MaxValue;
+    // Vars for states App
+    public bool MenuState = true;
+    public Person person = new Person();
+    private void Start()
+    {
+        
+    }
+
     public struct Mark
     {
         public int id;
@@ -14,6 +24,28 @@ public class Structions : MonoBehaviour
         public string _date;
         public string login;
         public string place;
+    }
+    public struct Person
+    {
+        public string getType
+        {
+            get
+            {
+                string value;
+                switch (this.type)
+                {
+                    case 0: value = "student"; break;
+                    case 1: value= "aspirant"; break;
+                    case 2: value= "teacher"; break;
+                    default: value = "student"; break;
+                }
+                return value;
+            }
+        }
+        public int type;
+        public string name;
+        public string lastName;
+        public string group;
     }
     public string[] NameCorpuses = new string[27] {
         "MAIN",
@@ -45,35 +77,6 @@ public class Structions : MonoBehaviour
         "I"
     };
     public string[] NamePaths = new string[22];
-    int [,,] Main_Graph = new int[27, 27, 1]{
-        {{0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}},
-        {{0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}},
-        {{0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}},
-        {{0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}},
-        {{0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}},
-        {{0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}},
-        {{0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}},
-        {{0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}},
-        {{0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}},
-        {{0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}},
-        {{0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}},
-        {{0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}},
-        {{0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}},
-        {{0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}},
-        {{0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}},
-        {{0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}},
-        {{0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}},
-        {{0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}},
-        {{0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}},
-        {{0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}},
-        {{0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}},
-        {{0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}},
-        {{0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}},
-        {{0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}},
-        {{0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}},
-        {{0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}},
-        {{0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}}
-    };
     public void generateGraph(GameObject ParentCorpuses, GameObject ParentPaths)
     {
 
@@ -88,8 +91,8 @@ public class Structions : MonoBehaviour
 
         for (int i = 0; i < N_Paths; i++)
         {
-            GameObject c = ParentPaths.GetComponentsInChildren<Transform>()[i+1].gameObject;
-            if(Char.ToString(c.name[0]) == "p")
+            GameObject c = ParentPaths.GetComponentsInChildren<Transform>()[i + 1].gameObject;
+            if (Char.ToString(c.name[0]) == "p")
             {
                 Paths[i] = c;
             }
@@ -100,7 +103,7 @@ public class Structions : MonoBehaviour
         }
         for (int i = 0; i < N_Corpuses; i++)
         {
-            Corpuses[i] = ParentCorpuses.GetComponentsInChildren<Transform>()[i+1].gameObject;
+            Corpuses[i] = ParentCorpuses.GetComponentsInChildren<Transform>()[i + 1].gameObject;
             if (Corpuses[i].name.Substring(0, 3) != "Куб")
             {
 
@@ -116,7 +119,7 @@ public class Structions : MonoBehaviour
         }
         // Обходим все входы в корпуса
         GameObject[] parEntr = new GameObject[GetComponentsInChildren<Transform>().Length];
-        int []ConPaths = new int[parEntr.Length];
+        int[] ConPaths = new int[parEntr.Length];
         for (int i = 1; i < parEntr.Length; i++)
         {
             double minDist = INF;
@@ -133,12 +136,12 @@ public class Structions : MonoBehaviour
                     minDist = getDist(dx - lx, dz - lz);
                     ConPaths[i] = j;
                 }
-                if(minDist > getDist((dx - length / 2) - lx, dz - lz))
+                if (minDist > getDist((dx - length / 2) - lx, dz - lz))
                 {
                     minDist = getDist((dx - length / 2) - lx, dz - lz);
                     ConPaths[i] = j;
                 }
-                if(minDist > getDist(dx - lx, (dz - length / 2) - lz))
+                if (minDist > getDist(dx - lx, (dz - length / 2) - lz))
                 {
                     minDist = getDist(dx - lx, (dz - length / 2) - lz);
                     ConPaths[i] = j;
@@ -152,7 +155,7 @@ public class Structions : MonoBehaviour
         for (int i = 0; i < Paths.Length; i++)
         {
             double minDist = INF;
-            for (int j = i+1; j < Paths.Length; j++)
+            for (int j = i + 1; j < Paths.Length; j++)
             {
                 float dx = Paths[i].transform.position.x;
                 float dz = Paths[i].transform.position.z;
