@@ -1,7 +1,7 @@
 """
 Routes and views for the flask application.
 """
-
+import flask
 from datetime import datetime
 from flask import render_template
 from flask import request
@@ -9,6 +9,7 @@ from MephiMapsServer import app
 from MephiMapsServer import Parser
 from MephiMapsServer import Filter
 from MephiMapsServer import DB
+import json
 
 
 @app.after_request
@@ -87,21 +88,22 @@ def MarksGet():
 	db = DB("./MephiMapsServer/database.db")
 	arr = list(db.getData("Marks"))
 	db.close()
-	res = ""
-	for j in arr:
-		for i in j:
-			res += f"{i}##"
-		res = res[:-2]
-		res += "&&"
-	return res[:-3]
+	resp = []
+	for i in arr:
+		resp.append({"id": i[0], "content": i[1], "_date": i[2], "user": i[3], "place": i[4]})
+	resp = flask.json.jsonify(resp)
+	resp.headers["charset"] = "UTF-8"
+	return resp
 
 @app.route("/schedules/get", methods=['GET', "POST"])
 def schedulesGet():
 	db = DB("./MephiMapsServer/database.db")
 	arr = list(db.getData("Schedules"))
-	print(arr)
+	resp = flask.json.jsonify(arr)
 	# db.close()
-	return render_template("index.html", title="Schedules", content=arr)
+	return resp
+
+
 
 @app.route("/users/get", methods=['GET', "POST"])
 def usersGet():
@@ -110,3 +112,22 @@ def usersGet():
 	print(arr)
 	# db.close()
 	return render_template("index.html", title="Users", content=arr)
+
+
+
+@app.route("/vars/get", methods=['GET', "POST"])
+def varsGet():
+	_name = request.args.get('name', default= "feel", type = str)
+
+	db = DB("./MephiMapsServer/database.db")
+	arr = list(db.getData("Vars"))
+	data = []
+	for i in arr:
+		data.append({"id": i[0], "name": i[1], "value": i[2]})
+
+	resp = flask.json.jsonify(data)
+	print(_name)
+
+
+	db.close()
+	return resp

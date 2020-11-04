@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class Menu : Structions
+public class Menu : MonoBehaviour
 {
     // Init vars is called before the first frame update
     public Button goBtn;
@@ -39,7 +39,7 @@ public class Menu : Structions
         string Group = GroupInput.GetComponent<TMP_InputField>().text;
         int TypePerson = thisDropdown.GetComponent<Dropdown>().value;
 
-        person.name = Name;
+        /*person.name = Name;
         person.lastName = LastName;
         person.group = Group;
         person.type = TypePerson;
@@ -48,7 +48,7 @@ public class Menu : Structions
 
         print(person);
 
-        MenuState = false;
+        MenuState = false;*/
         _Menu.SetActive(false);
     }
 }

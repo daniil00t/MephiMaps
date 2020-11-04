@@ -5,12 +5,24 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 
+/*using System.Text.Json;
+using System.Text.Json.Serialization;*/
+using Newtonsoft.Json.Linq;
+//using LitJson;
 
 namespace _Main_
 {
     public class Main : Marks
     {
         public Mark[] _Marks;
+
+
+        IEnumerator _GetRequest(UnityWebRequestAsyncOperation wr)
+        {
+            yield return wr;
+        }
+
+
         public IEnumerator GetRequest(string uri)
         {
             UnityWebRequest uwr = UnityWebRequest.Get(uri);
@@ -22,9 +34,12 @@ namespace _Main_
             }
             else
             {
-                string result = uwr.downloadHandler.text;
+
+                JObject json = JObject.Parse(uwr.downloadHandler.text);
+
                 //Debug.Log(result);
-                string[] arrOne = System.Text.RegularExpressions.Regex.Split(result, "&&");
+                print($"----------------{uwr.downloadHandler.text}------------");
+                /*string[] arrOne = System.Text.RegularExpressions.Regex.Split(result, "&&");
                 Mark[] Marks = new Mark[arrOne.Length];
                 //Debug.Log(arrOne.Length);
                 for (int i = 0; i < arrOne.Length; i++)
@@ -40,56 +55,27 @@ namespace _Main_
                     //Debug.Log(Marks[i].cnt);
                     //Debug.Log(Marks[i]._date);
                     //Debug.Log(Marks[i].login);
-                }
-                _Marks = Marks;
+                }*/
+                _Marks = new Mark[1];
 
 
                 Marks _mark = new Marks();
-                _mark.initMarks(Marks);
+                _mark.initMarks(new Mark[1]);
                 _mark.start();
             }
         }
-        public IEnumerator GetWeather(string uri)
+        public void Start()
         {
-            UnityWebRequest uwr = UnityWebRequest.Get(uri);
-            yield return uwr.SendWebRequest();
+            /*using (UnityWebRequest webRequest = UnityWebRequest.Get("http://localhost:5556/users/get/")){
+                StartCoroutine(_GetRequest(webRequest.SendWebRequest()));
 
-            if (uwr.isNetworkError)
-            {
-                Debug.Log("Error While Sending: " + uwr.error);
-            }
-            else
-            {
-                string result = uwr.downloadHandler.text;
+                print(webRequest.downloadHandler.text);
                 
             }
-        }
-        private void Start()
-        {
             
             Debug.Log("Programm is running!");
-            StartCoroutine(GetRequest("http://localhost:5556/marks/get"));
-            string urlWeather = "https://api.weather.yandex.ru/v2/informers?lat=55.650065057073256&lon=37.66450278636252";
-            //[55.650065057073256,37.66450278636252]
-
-            Dictionary<string, string> headers = new Dictionary<string, string>();
-            headers.Add("X-Yandex-API-Key", "7c5d2aac-973d-40ef-816a-e6b0173893c1");
-
-            WWW www = new WWW(urlWeather, new Byte[0], headers);
-            Debug.Log($"-----------------Weather: {www.text}--------------");
-/*            {
-                if (string.IsNullOrEmpty(www.error))
-                {
-                    
-                    
-                }
-                else
-                {
-                    Debug.LogError("Error: " + www.error);
-                }
-            }*/
-            
-            //generateGraph(GameObject.Find("Map"), GameObject.Find("Paths"));
+            //string urlWeather = "https://api.weather.yandex.ru/v2/informers?lat=55.650065057073256&lon=37.66450278636252";
+            //[55.650065057073256,37.66450278636252]*/
         }
     }
 }

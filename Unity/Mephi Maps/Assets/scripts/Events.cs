@@ -20,7 +20,6 @@ namespace EventsControll
 			}
 			return null;
 		}
-
 		public Button SettingsBtn;
 
 		public Button ExitBtn;

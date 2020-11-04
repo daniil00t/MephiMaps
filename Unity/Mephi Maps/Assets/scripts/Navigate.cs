@@ -94,7 +94,7 @@ public class Navigate : Structions
 
         
         // Пример матрицы смежности для неориентированного взвешенного графа без циклов
-        matrix = new float[SIZE, SIZE]{ 
+        /*matrix = new float[SIZE, SIZE]{ 
                     { 0, 13, INF, 3 },
                     { 13, 0, 2, 14 }, 
                     { INF, 2, 0, 1 },
@@ -113,7 +113,7 @@ public class Navigate : Structions
         }
 
         // Вывод пути (начальная вершина оказалась в конце массива из k элементов)
-        print("\nВывод кратчайшего пути\n");
+        print("\nВывод кратчайшего пути\n");*/
         
     }
 

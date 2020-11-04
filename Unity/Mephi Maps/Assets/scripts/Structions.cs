@@ -8,7 +8,7 @@ using EventsControll;
 
 public class Structions : Events
 {
-    public float INF = Single.MaxValue;
+    public float INF = Single.MaxValue-1;
     // Vars for states App
     public bool MenuState = true;
     public Person person = new Person();

@@ -30,14 +30,16 @@ public class Clicker : Main
         }
         return null;
     }
-
+    
     private void Update()
     {
+        bool menuState = GameObject.Find("Menu") == null ? false : true;
+        print(menuState);
         ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out hit))
         {
             //print($"{Input.GetMouseButtonDown(0)} && {!MenuState}");
-            if (Input.GetMouseButtonDown(0))
+            if (Input.GetMouseButtonDown(0) && !menuState)
             {
                 print(hit.point);
                 string name = hit.collider.name;
