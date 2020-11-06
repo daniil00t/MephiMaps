@@ -1,81 +1,77 @@
 ﻿using System;
-using System.Net;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
-
-/*using System.Text.Json;
-using System.Text.Json.Serialization;*/
 using Newtonsoft.Json.Linq;
-//using LitJson;
 
-namespace _Main_
+
+public class Main : Marks
 {
-    public class Main : Marks
+    private Marks InterfaceMark = new Marks();
+    private static GameObject FindObject(GameObject parent, string name)
     {
-        public Mark[] _Marks;
-
-
-        IEnumerator _GetRequest(UnityWebRequestAsyncOperation wr)
+        Transform[] trs = parent.GetComponentsInChildren<Transform>(true);
+        foreach (Transform t in trs)
         {
-            yield return wr;
-        }
-
-
-        public IEnumerator GetRequest(string uri)
-        {
-            UnityWebRequest uwr = UnityWebRequest.Get(uri);
-            yield return uwr.SendWebRequest();
-
-            if (uwr.isNetworkError)
+            if (t.name == name)
             {
-                Debug.Log("Error While Sending: " + uwr.error);
+                return t.gameObject;
             }
-            else
+        }
+        return null;
+    }
+
+    public IEnumerator GetRequest(string uri)
+    {
+        UnityWebRequest uwr = UnityWebRequest.Get(uri);
+        yield return uwr.SendWebRequest();
+
+        if (uwr.isNetworkError)
+        {
+            Debug.Log("Error While Sending: " + uwr.error);
+        }
+        else
+        {
+
+            JObject json = JObject.Parse(uwr.downloadHandler.text);
+            int count = (int)json["count"];
+
+
+            JArray array = JArray.Parse(json["content"].ToString());
+
+            int i = 0;
+            InterfaceMark.init(GameObject.Find("Mark_Labels/MarkLabel"), FindObject(GameObject.Find("Mark_Panels"), "Mark_Panel"));
+            foreach (JObject obj in array.Children<JObject>())
             {
-
-                JObject json = JObject.Parse(uwr.downloadHandler.text);
-
-                //Debug.Log(result);
-                print($"----------------{uwr.downloadHandler.text}------------");
-                /*string[] arrOne = System.Text.RegularExpressions.Regex.Split(result, "&&");
-                Mark[] Marks = new Mark[arrOne.Length];
-                //Debug.Log(arrOne.Length);
-                for (int i = 0; i < arrOne.Length; i++)
+                Mark mark = new Mark();
+                foreach (JProperty singleProp in obj.Properties())
                 {
-                    string[] arrTwo = System.Text.RegularExpressions.Regex.Split(arrOne[i], "##");
+                    string name = singleProp.Name;
+                    string value = singleProp.Value.ToString();
 
-                    Marks[i].id = Int32.Parse(arrTwo[0]);
-                    Marks[i].cnt = arrTwo[1];
-                    Marks[i]._date = arrTwo[2];
-                    Marks[i].login = arrTwo[3];
-                    Marks[i].place = arrTwo[4];
-                    //Debug.Log(Marks[i].id);
-                    //Debug.Log(Marks[i].cnt);
-                    //Debug.Log(Marks[i]._date);
-                    //Debug.Log(Marks[i].login);
-                }*/
-                _Marks = new Mark[1];
+                    // save data to struct Mark()
+                    if(name == "id") mark.id = Int32.Parse(value);
+                    if(name == "_date") mark._date = value;
+                    if(name == "place") mark.place =   value;
+                    if(name == "user") mark.login = value;
+                    if(name == "content") mark.cnt = value;
 
+                }
+                InterfaceMark.renderMark(count, i, mark);
+                InterfaceMark.renderMarkPanel(count, i, mark);
 
-                Marks _mark = new Marks();
-                _mark.initMarks(new Mark[1]);
-                _mark.start();
+                i++;
             }
         }
-        public void Start()
-        {
-            /*using (UnityWebRequest webRequest = UnityWebRequest.Get("http://localhost:5556/users/get/")){
-                StartCoroutine(_GetRequest(webRequest.SendWebRequest()));
+    }
+    public void Start()
+    {
+        
 
-                print(webRequest.downloadHandler.text);
-                
-            }
-            
-            Debug.Log("Programm is running!");
-            //string urlWeather = "https://api.weather.yandex.ru/v2/informers?lat=55.650065057073256&lon=37.66450278636252";
-            //[55.650065057073256,37.66450278636252]*/
-        }
+        StartCoroutine(GetRequest("http://localhost:5556/marks/get"));
+
+        Debug.Log("Programm is running!");
+        //string urlWeather = "https://api.weather.yandex.ru/v2/informers?lat=55.650065057073256&lon=37.66450278636252";
+        //[55.650065057073256,37.66450278636252]
     }
 }

@@ -1,21 +1,16 @@
-﻿using EventsControll;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using UnityEngine;
-using EventsControll;
 
-public class Structions : Events
+public class Structions : MonoBehaviour
 {
-    public float INF = Single.MaxValue-1;
+    /*public float INF = Single.MaxValue-1;
     // Vars for states App
     public bool MenuState = true;
-    public Person person = new Person();
-    private void Start()
-    {
-        
-    }
+    public Person person = new Person();*/
+
 
     public struct Mark
     {
@@ -25,7 +20,7 @@ public class Structions : Events
         public string login;
         public string place;
     }
-    public struct Person
+    /*public struct Person
     {
         public string getType
         {
@@ -186,5 +181,5 @@ public class Structions : Events
         }
 
 
-    }
+    }*/
 }

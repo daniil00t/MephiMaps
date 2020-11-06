@@ -27,7 +27,12 @@ class DB:
 				self.cur.execute('''UPDATE OR IGNORE Marks SET user = ? WHERE id = ?''', (data["user"], id))
 			except Exception as e:
 				self.cur.execute('''UPDATE OR IGNORE Marks SET place = ? WHERE id = ?''', (data["place"], id))
-		
+
+
+	def deleteMark(self, id):
+		self.cur.execute('''DELETE FROM Marks WHERE id = ?''', (id, ))
+
+
 	def updateUser(self, id, data):
 		try:
 			self.cur.execute('''UPDATE OR IGNORE Users SET login = ? WHERE id = ?''', (data["login"], id))
@@ -55,7 +60,7 @@ class DB:
 		except Exception as e:
 			self.cur.execute('''UPDATE OR IGNORE Vars SET value = ? WHERE id = ?''', (data["value"], id))
 			self.cur.execute('''UPDATE OR IGNORE Vars SET lst_update = ? WHERE id = ?''', (str(datetime.datetime.now()), id))
-		
+
 
 		
 	def getData(self, table):
@@ -93,10 +98,10 @@ class DB:
 #
 
 # db = DB("database.db")
-# # db.updateVars(3, {
-# # 	"value": 0.1725*1.7
-# # })
-# for i in db.getData("Vars"):
+# # db.deleteMark(6)
+# for i in range(7, 12):
+# 	db.deleteMark(i)
+# for i in db.getData("Marks"):
 # 	print(i)
 # db.close()
 
