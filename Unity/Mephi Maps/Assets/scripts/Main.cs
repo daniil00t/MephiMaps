@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Networking;
 using Newtonsoft.Json.Linq;
-
+using System.Collections.Generic;
 
 public class Main : Marks
 {
@@ -20,7 +20,6 @@ public class Main : Marks
         }
         return null;
     }
-
     public IEnumerator GetRequest(string uri)
     {
         UnityWebRequest uwr = UnityWebRequest.Get(uri);
@@ -39,11 +38,38 @@ public class Main : Marks
 
             JArray array = JArray.Parse(json["content"].ToString());
 
+            Dictionary<string, int> corpusesNames = new Dictionary<string, int>();
+            Dictionary<string, int> corpusesCount = new Dictionary<string, int>();
+
             int i = 0;
             InterfaceMark.init(GameObject.Find("Mark_Labels/MarkLabel"), FindObject(GameObject.Find("Mark_Panels"), "Mark_Panel"));
+
+            foreach (JObject obj in array.Children<JObject>())
+            {
+                string corpus = System.Text.RegularExpressions.Regex.Split((string)obj["place"], "-")[0];
+
+                if (!corpusesNames.ContainsKey(corpus))
+                    corpusesNames.Add(corpus, 1);
+                else 
+                    corpusesNames[corpus]++;
+
+                if (!corpusesCount.ContainsKey(corpus))
+                    corpusesCount.Add(corpus, i);
+                else
+                    corpusesCount[corpus] = i;
+                i++;
+            }
+
+            i = 0;
             foreach (JObject obj in array.Children<JObject>())
             {
                 Mark mark = new Mark();
+                string corpus = System.Text.RegularExpressions.Regex.Split((string)obj["place"], "-")[0];
+
+                mark.corpus = corpus;
+                mark.marksCount = corpusesNames[corpus];
+
+
                 foreach (JProperty singleProp in obj.Properties())
                 {
                     string name = singleProp.Name;
@@ -52,13 +78,13 @@ public class Main : Marks
                     // save data to struct Mark()
                     if(name == "id") mark.id = Int32.Parse(value);
                     if(name == "_date") mark._date = value;
-                    if(name == "place") mark.place =   value;
-                    if(name == "user") mark.login = value;
+                    if(name == "place") mark.place = value;
+                    if(name == "user") mark.login  = value;
                     if(name == "content") mark.cnt = value;
 
                 }
-                InterfaceMark.renderMark(count, i, mark);
-                InterfaceMark.renderMarkPanel(count, i, mark);
+                InterfaceMark.renderMark(count, i, mark, corpusesNames, corpusesCount);
+                InterfaceMark.renderMarkPanel(count, i, mark, corpusesNames);
 
                 i++;
             }

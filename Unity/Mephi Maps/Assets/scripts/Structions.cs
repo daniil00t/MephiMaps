@@ -19,6 +19,9 @@ public class Structions : MonoBehaviour
         public string _date;
         public string login;
         public string place;
+        public string corpus;
+        public int marksCount;
+
     }
     /*public struct Person
     {

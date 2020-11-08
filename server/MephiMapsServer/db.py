@@ -97,13 +97,14 @@ class DB:
 #	Здесь мы можем подредактировать таблицу
 #
 
-# db = DB("database.db")
-# # db.deleteMark(6)
-# for i in range(7, 12):
-# 	db.deleteMark(i)
-# for i in db.getData("Marks"):
-# 	print(i)
-# db.close()
+db = DB("database.db")
+# db.deleteMark(6)
+db.updateMark(13, {
+	"place": "A-100"
+	})
+for i in db.getData("Marks"):
+	print(i)
+db.close()
 
 
 # Structure of DataBase:

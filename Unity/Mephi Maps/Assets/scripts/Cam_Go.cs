@@ -13,14 +13,20 @@ public class Cam_Go : MonoBehaviour
     public bool ActiveCorpuses = false;
     public Vector3 StartCameraPosition = new Vector3(-304, 139, 535);
 
+    private GameObject Mark_Labels;
+
+    private double getAlpha(float x, float z)
+    {
+        return Math.Atan(z / x) * (180/Math.PI) + 90.0;
+    }
 
     public void Start()
     {
+        Mark_Labels = GameObject.Find("Mark_Labels");
         gameObject.transform.position = StartCameraPosition;
         Debug.Log("Start!");
     }
     
-
     void Update()
     {
         float f = 0.0f;
@@ -47,6 +53,14 @@ public class Cam_Go : MonoBehaviour
         newPosition.z = transform.position.z;
         newPosition.x = transform.position.x;
         transform.position = newPosition;
+        if(Mark_Labels.transform.childCount > 1)
+        {
+            for (int i = 0; i < Mark_Labels.transform.childCount; i++)
+            {
+                GameObject child = Mark_Labels.transform.GetChild(i).gameObject;
+                child.transform.rotation = Quaternion.Euler(0, (float)getAlpha(transform.position.x - child.transform.position.x, child.transform.position.z - transform.position.z), 0);
+            }
+        }
 
     }
 
