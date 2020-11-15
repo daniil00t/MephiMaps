@@ -25,12 +25,23 @@ public class Marks : Structions
         public Vector3 getPosition()
         {
             Vector3 res = new Vector3(0, 0, 0);
-            res.y = Pos.y * 2f + 10f;
+            res.y = Pos.y * 2f - 27.7f;
             res = new Vector3(Pos.x, res.y, Pos.z);
             return res;
         }
     
     }
+     public void PopulateDropdown(Dropdown dropdown, string[] optionsArray)
+     {
+         List<string> options = new List<string>();
+         foreach (string option in optionsArray)
+         {
+             options.Add(option); // Or whatever you want for a label
+         }
+         dropdown.ClearOptions();
+         dropdown.AddOptions(options);
+     }
+
     public void renderMark(int count, int i, Mark mark, Dictionary<string, int> cors, Dictionary<string, int> corsCount)
     {
         
@@ -52,20 +63,21 @@ public class Marks : Structions
 
         if (i == count - 1) this.templateMarkLabel.SetActive(false);
     }
-    public void renderMarkPanel(int count, int i, Mark mark, Dictionary<string, int> cors)
+    public void renderMarkPanel(int count, int i, Mark mark, Dictionary<string, int> cors, Dictionary<string, int> corsCount)
     {
         GameObject goCnt = Instantiate(this.templateMarkPanel).gameObject;
         goCnt.GetComponentsInChildren<Transform>()[1].GetComponentsInChildren<Transform>()[2].GetComponent<Text>().text = $"{mark.cnt}";
         goCnt.GetComponentsInChildren<Transform>()[1].GetComponentsInChildren<Transform>()[3].GetComponent<Text>().text = $"From user: {mark.login}";
         goCnt.GetComponentsInChildren<Transform>()[1].GetComponentsInChildren<Transform>()[4].GetComponent<Text>().text = $"Date: {mark._date}";
         goCnt.GetComponentsInChildren<Transform>()[1].GetComponentsInChildren<Transform>()[5].GetComponent<Text>().text = $"Place: {mark.place}";
-
+        Dropdown tmp = goCnt.GetComponentsInChildren<Transform>()[1].GetComponentsInChildren<Transform>()[6].gameObject.GetComponent<Dropdown>();
+        /*if(mark.analogMarksAsCorpusName.Length > 0)
+            PopulateDropdown(tmp, mark.analogMarksAsCorpusName);*/
+        //print(mark.analogMarksAsCorpusName == null ? null : mark.analogMarksAsCorpusName);
         goCnt.name = $"Mark_Panel_{mark.id}";
-
         goCnt.transform.parent = GameObject.Find("Mark_Panels").transform;
         
         goCnt.SetActive(false);
-
         if (i == count - 1) this.templateMarkPanel.SetActive(false);
     }
 }

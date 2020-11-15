@@ -7,9 +7,9 @@ from MephiMapsServer import app
 
 
 if __name__ == '__main__':
-	HOST = environ.get('SERVER_HOST', 'localhost')
+	HOST = environ.get('SERVER_HOST', '192.168.100.10')
 	PORT_HTTP = 5556
 		
 	# socketio.run(app, HOST, PORT, debug=True)
 	# eventlet.wsgi.server(eventlet.listen(('localhost', PORT_WS)), appIO)
-	app.run(HOST, PORT_HTTP)
+	app.run(HOST, PORT_HTTP, debug=True)

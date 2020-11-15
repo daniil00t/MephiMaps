@@ -10,7 +10,7 @@ class DB:
 		self.cur = self.conn.cursor()
 
 	def insertMark(self, data):
-		self.cur.execute("INSERT OR IGNORE INTO Marks (content, _date, user, place) VALUES (?, ?, ?, ?)", (data["content"], str(datetime.datetime.now()), data['user'], data['place']))
+		self.cur.execute("INSERT OR IGNORE INTO Marks (content, _date, user, place) VALUES (?, ?, ?, ?)", (data["content"], str(datetime.datetime.now()), data['login'], data['place']))
 	def insertUser(self, data):
 		# print(data)
 		self.cur.execute("INSERT OR IGNORE INTO Users (login, password, _date, ban, rating) VALUES (?, ?, ?, ?, ?)", (data["login"], data['password'], str(datetime.datetime.now()), data['ban'], data['rating']))
@@ -60,7 +60,8 @@ class DB:
 		except Exception as e:
 			self.cur.execute('''UPDATE OR IGNORE Vars SET value = ? WHERE id = ?''', (data["value"], id))
 			self.cur.execute('''UPDATE OR IGNORE Vars SET lst_update = ? WHERE id = ?''', (str(datetime.datetime.now()), id))
-
+	def deleteTable(self, table):
+		self.cur.execute('''DROP TABLE Marks''')	
 
 		
 	def getData(self, table):
@@ -72,10 +73,10 @@ class DB:
 
 
 
-# def createTables(cur):
+def createTables(cur):
 	# c.execute('''CREATE TABLE Marks (iter real, content text, _date text, user text, place text)''')
-	# cur.execute('''CREATE TABLE Marks
- #             (id INTEGER PRIMARY KEY, content text, _date date, user text, place text)''')
+	cur.execute('''CREATE TABLE Marks
+             (id INTEGER PRIMARY KEY, content text, _date date, user text, place text)''')
 	# cur.execute('''CREATE TABLE Users
  #             (id INTEGER PRIMARY KEY AUTOINCREMENT, login text, password text, _date text, ban boolean, rating real)''')
 	# cur.execute('''CREATE TABLE Schedules
@@ -97,14 +98,16 @@ class DB:
 #	Здесь мы можем подредактировать таблицу
 #
 
-db = DB("database.db")
-# db.deleteMark(6)
-db.updateMark(13, {
-	"place": "A-100"
-	})
-for i in db.getData("Marks"):
-	print(i)
-db.close()
+# db = DB("database.db")
+# # createTables(db.cur)
+# # db.deleteMark(6)
+# # db.updateMark(13, {
+# # 	"place": "A-100"
+# # 	})
+# # db.deleteTable("Marks")
+# # for i in db.getData("Marks"):
+# # 	print(i)
+# db.close()
 
 
 # Structure of DataBase:

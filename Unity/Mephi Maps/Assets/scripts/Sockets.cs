@@ -3,33 +3,21 @@ using UnityEngine;
 using SocketIO;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
+using System;
 
-public class Sockets : MonoBehaviour
+public class Sockets : Structions
 {
+	public GameObject socketGO;
 	private SocketIOComponent socket;
 
-	public void Start()
+	public IEnumerator sendDataToServer(string nameEvent, Dictionary<string, string> data, Callback callback)
 	{
-		GameObject go = GameObject.Find("SocketIO");
-		socket = go.GetComponent<SocketIOComponent>();
-
-		socket.On("open", TestOpen);
-		socket.On("hello", TestBoop);
-		socket.On("close", TestClose);
-
-		StartCoroutine(BeepBoop());
-	}
-
-	private IEnumerator BeepBoop()
-	{
+		socket = GameObject.Find("SocketIO").GetComponent<SocketIOComponent>();
 		// wait 1 seconds and continue
-		yield return new WaitForSeconds(1);
-
-		Dictionary<string, string> data = new Dictionary<string, string>();
-        data.Add("cnt", "hello!");
-
-
-		socket.Emit("helloMMM", JSONObject.Create(data));
+		yield return new WaitForSeconds(0.8f);
+		print($"send massage: {nameEvent}, {data["login"]}");
+		socket.Emit(nameEvent, JSONObject.Create(data));
+		callback();
 	}
 
 	public void TestOpen(SocketIOEvent e)
@@ -59,4 +47,5 @@ public class Sockets : MonoBehaviour
 	{
 		Debug.Log("[SocketIO] Close received: " + e.name + " " + e.data);
 	}
+
 }

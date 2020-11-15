@@ -3,15 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Cam_Go : MonoBehaviour
+public class Cam_Go : Structions
 {
-
     float mainSpeed = 70.0f; //regular speed
     float shiftAdd = 250.0f; //multiplied by how long shift is held.  Basically running
     float maxShift = 1000.0f; //Maximum speed when holdin gshift
     private float totalRun = 1.0f;
     public bool ActiveCorpuses = false;
-    public Vector3 StartCameraPosition = new Vector3(-304, 139, 535);
+    //public Vector3 StartCameraPosition = new Vector3(-304, 139, 535);
 
     private GameObject Mark_Labels;
 
@@ -23,16 +22,13 @@ public class Cam_Go : MonoBehaviour
     public void Start()
     {
         Mark_Labels = GameObject.Find("Mark_Labels");
-        gameObject.transform.position = StartCameraPosition;
+        //gameObject.transform.position = StartCameraPosition;
         Debug.Log("Start!");
     }
     
     void Update()
     {
-        float f = 0.0f;
         Vector3 p = GetBaseInput();
-
-
         if (Input.GetKey(KeyCode.LeftShift))
         {
             totalRun += Time.deltaTime;
@@ -48,11 +44,15 @@ public class Cam_Go : MonoBehaviour
 
         p = p * Time.deltaTime;
         Vector3 newPosition = transform.position;
-       
-        transform.Translate(p);
-        newPosition.z = transform.position.z;
-        newPosition.x = transform.position.x;
-        transform.position = newPosition;
+
+        if (!state.Menu && !state.addMarkPanel)
+        {
+            transform.Translate(p);
+            newPosition.z = transform.position.z;
+            newPosition.x = transform.position.x;
+            transform.position = newPosition;
+        }
+        
         if(Mark_Labels.transform.childCount > 1)
         {
             for (int i = 0; i < Mark_Labels.transform.childCount; i++)
@@ -94,7 +94,6 @@ public class Cam_Go : MonoBehaviour
                     transform.rotation = Quaternion.Euler(75f, 90f, 0f);
                 }break;
         }
-        
     }
 
 }
