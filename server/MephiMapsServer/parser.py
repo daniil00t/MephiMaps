@@ -28,9 +28,12 @@ class Parser:
 		
 
 	def Request(self, Link):
-		req = urllib.request.Request(Link, headers={'User-Agent': 'Mozilla/5.0'})
-		html = urllib.request.urlopen(req).read()
-		soup = bs.BeautifulSoup(html, features="html.parser")
+		try:
+			req = urllib.request.Request(Link, headers={'User-Agent': 'Mozilla/5.0'})
+			html = urllib.request.urlopen(req).read()
+			soup = bs.BeautifulSoup(html, features="html.parser")
+		except Exception as e:
+			return None
 		return soup
 
 	def Filter(self, text):
@@ -44,7 +47,10 @@ class Parser:
 		Names_arr = []
 		Links_arr = []
 		Error = False
-		soup = self.Request(self.Link)
+		if self.Request(self.Link) != None:
+			soup = self.Request(self.Link)
+		else:
+			return []
 
 		data = []
 		days = soup.find_all("div", class_="list-group")
@@ -71,24 +77,6 @@ class Parser:
 		return data
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-# if __name__ == "__main__":
-# 	if not init("NameGroups.txt", "LinksGroups.txt"):
-# 		soup = Request(Link)
-# 		print(Parse(soup))
-# 	else:
-# 		print("Ошибка! Проверьте корректность введенных данных")
 
 
 # хочу обратиться к создателям сайта, а именно, кто писал модуль отображения расписания: за чтооооо!

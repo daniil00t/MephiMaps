@@ -1,31 +1,18 @@
-﻿using UnityEngine;
-using UnityEngine.UI;
-using System.Collections;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
-public class Events : Cam_Go
+public class Events : MonoBehaviour
 {
-	public Button thisButton;
+    // Start is called before the first frame update
+    void Start()
+    {
+        
+    }
 
-	public void Start()
-	{
-		Button btn = thisButton.GetComponent<Button>();
-		btn.onClick.AddListener(TaskOnClick);
-	}
-
-	public void TaskOnClick()
-	{
-		Debug.Log("You have clicked the button!");
-		print(thisButton.gameObject.transform.parent.gameObject.name);
-        try
-        {
-			thisButton.gameObject.transform.parent.gameObject.transform.parent.gameObject.SetActive(false);
-			toggleMapToCamera(false);
-
-		}
-        catch (System.Exception e)
-        {
-			print(e);
-        }
-		
-	}
+    // Update is called once per frame
+    void Update()
+    {
+        
+    }
 }

@@ -10,12 +10,14 @@ class DB:
 		self.cur = self.conn.cursor()
 
 	def insertMark(self, data):
-		self.cur.execute("INSERT OR IGNORE INTO Marks (content, _date, user, place) VALUES (?, ?, ?, ?)", (data["content"], str(datetime.datetime.now()), data['user'], data['place']))
+		self.cur.execute("INSERT OR IGNORE INTO Marks (content, _date, user, place) VALUES (?, ?, ?, ?)", (data["content"], str(datetime.datetime.now()), data['login'], data['place']))
 	def insertUser(self, data):
 		# print(data)
 		self.cur.execute("INSERT OR IGNORE INTO Users (login, password, _date, ban, rating) VALUES (?, ?, ?, ?, ?)", (data["login"], data['password'], str(datetime.datetime.now()), data['ban'], data['rating']))
 	def insertSchedule(self, data):
 		self.cur.execute("INSERT OR IGNORE INTO Schedules (_group, content, lst_update) VALUES (?, ?, ?)", (data["_group"], data['content'], str(datetime.datetime.now())))
+	def insertVars(self, data):
+		self.cur.execute("INSERT OR IGNORE INTO Vars (name, value, lst_update) VALUES (?, ?, ?)", (data["name"], data['value'], str(datetime.datetime.now())))
 
 	def updateMark(self, id, data):
 		try:
@@ -25,7 +27,12 @@ class DB:
 				self.cur.execute('''UPDATE OR IGNORE Marks SET user = ? WHERE id = ?''', (data["user"], id))
 			except Exception as e:
 				self.cur.execute('''UPDATE OR IGNORE Marks SET place = ? WHERE id = ?''', (data["place"], id))
-		
+
+
+	def deleteMark(self, id):
+		self.cur.execute('''DELETE FROM Marks WHERE id = ?''', (id, ))
+
+
 	def updateUser(self, id, data):
 		try:
 			self.cur.execute('''UPDATE OR IGNORE Users SET login = ? WHERE id = ?''', (data["login"], id))
@@ -45,7 +52,16 @@ class DB:
 		except Exception as e:
 			self.cur.execute('''UPDATE OR IGNORE Schedules SET content = ? WHERE id = ?''', (data["content"], id))
 			self.cur.execute('''UPDATE OR IGNORE Schedules SET lst_update = ? WHERE id = ?''', (str(datetime.datetime.now()), id))
-		
+	
+	def updateVars(self, id, data):
+		try:
+			self.cur.execute('''UPDATE OR IGNORE Vars SET name = ? WHERE id = ?''', (data["name"], id))
+			self.cur.execute('''UPDATE OR IGNORE Vars SET lst_update = ? WHERE id = ?''', (str(datetime.datetime.now()), id))
+		except Exception as e:
+			self.cur.execute('''UPDATE OR IGNORE Vars SET value = ? WHERE id = ?''', (data["value"], id))
+			self.cur.execute('''UPDATE OR IGNORE Vars SET lst_update = ? WHERE id = ?''', (str(datetime.datetime.now()), id))
+	def deleteTable(self, table):
+		self.cur.execute('''DROP TABLE Marks''')	
 
 		
 	def getData(self, table):
@@ -61,10 +77,12 @@ def createTables(cur):
 	# c.execute('''CREATE TABLE Marks (iter real, content text, _date text, user text, place text)''')
 	cur.execute('''CREATE TABLE Marks
              (id INTEGER PRIMARY KEY, content text, _date date, user text, place text)''')
-	cur.execute('''CREATE TABLE Users
-             (id INTEGER PRIMARY KEY AUTOINCREMENT, login text, password text, _date text, ban boolean, rating real)''')
-	cur.execute('''CREATE TABLE Schedules
-             (id INTEGER PRIMARY KEY, _group text, content text, lst_update date)''')
+	# cur.execute('''CREATE TABLE Users
+ #             (id INTEGER PRIMARY KEY AUTOINCREMENT, login text, password text, _date text, ban boolean, rating real)''')
+	# cur.execute('''CREATE TABLE Schedules
+ #             (id INTEGER PRIMARY KEY, _group text, content text, lst_update date)''')
+	# cur.execute('''CREATE TABLE Vars
+	#            (id INTEGER PRIMARY KEY, name text, value text, lst_update date)''')
 
 	
 
@@ -81,11 +99,14 @@ def createTables(cur):
 #
 
 # db = DB("database.db")
-# db.updateMark(5, {
-# 	"place": "V-"
-# })
-# for i in db.getData("Marks"):
-# 	print(i)
+# # createTables(db.cur)
+# # db.deleteMark(6)
+# # db.updateMark(13, {
+# # 	"place": "A-100"
+# # 	})
+# # db.deleteTable("Marks")
+# # for i in db.getData("Marks"):
+# # 	print(i)
 # db.close()
 
 

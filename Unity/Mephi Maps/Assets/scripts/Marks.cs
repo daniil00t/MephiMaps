@@ -1,26 +1,19 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-
-
-// Input.mouseScrollDelta example
-//
-// Create a sphere moved by a mouse scrollwheel or two-finger
-// slide on a Mac trackpad.
+using System.Collections.Generic;
 
 public class Marks : Structions
 {
-    public GameObject temp;
-    public GameObject tempCnt;
-    public GameObject [] corpus;
-    private Mark[] ARRAY_MARKS;
-    public void initMarks(Mark[] arr)
+    private GameObject templateMarkLabel;
+    private GameObject templateMarkPanel;
+    public void init(GameObject _templateMarkLabel, GameObject _templateMarkPanel)
     {
-        this.ARRAY_MARKS = arr;
+        this.templateMarkLabel = _templateMarkLabel;
+        this.templateMarkPanel = _templateMarkPanel;
     }
-    public struct PositionMark
+
+    private struct PositionMark
     {
         public Vector3 Pos;
         public Vector3 Size;
@@ -32,90 +25,59 @@ public class Marks : Structions
         public Vector3 getPosition()
         {
             Vector3 res = new Vector3(0, 0, 0);
-            res.y = Pos.y * 2f + 7f;
+            res.y = Pos.y * 2f - 27.7f;
             res = new Vector3(Pos.x, res.y, Pos.z);
             return res;
         }
+    
     }
-    public void start()
+     public void PopulateDropdown(Dropdown dropdown, string[] optionsArray)
+     {
+         List<string> options = new List<string>();
+         foreach (string option in optionsArray)
+         {
+             options.Add(option); // Or whatever you want for a label
+         }
+         dropdown.ClearOptions();
+         dropdown.AddOptions(options);
+     }
+
+    public void renderMark(int count, int i, Mark mark, Dictionary<string, int> cors, Dictionary<string, int> corsCount)
     {
-        for (int i = 0; i < this.ARRAY_MARKS.Length; i++)
+        
+        string _str = System.Text.RegularExpressions.Regex.Split(mark.place, "-")[0];
+        GameObject building = GameObject.Find(_str);
+        PositionMark pos_building = new PositionMark(building.transform.position, building.transform.localScale);
+
+
+        if(corsCount[mark.corpus] == i)
         {
-            Mark mark = ARRAY_MARKS[i];
-            temp = GameObject.Find("MarkLabel");
-            tempCnt = GameObject.Find("Mark_Panel");
-
-            string[] _str = System.Text.RegularExpressions.Regex.Split(mark.place, "-");
-            GameObject building = GameObject.Find(_str[0]);
-            PositionMark pos_building = new PositionMark(building.transform.position, building.transform.localScale);
-
-            /*pos_building.Pos = building.transform.position;
-            pos_building.Size = building.transform.localScale;*/
-            //temp.GetComponentsInChildren<GameObject>()[1].SetActive(false);
-
-            //corpus = GameObject.Find("Main").GetComponentsInChildren<GameObject>();
-
-            //GameObject Origin = gameObject;
-            //gameObject.GetComponent<Renderer>().enabled = false;
-
-
-
-            //Debug.Log(gameObject.transform.position);
-            //Debug.Log(gameObject.transform.localScale);
-            //Material Material1;
-            //Material1.color = Color.red;
-
-            //Debug.Log(_Marks.Length);
-
-            //Debug.Log(pos_building.getPosition());
-            try
-            {
-                GameObject go = Instantiate(temp, pos_building.getPosition(), temp.transform.rotation).gameObject;
-                GameObject goCnt = Instantiate(tempCnt).gameObject;
-
-                go.GetComponentsInChildren<Transform>()[1].GetComponent<TextMeshPro>().SetText($"{mark.id}: {mark.cnt}, {mark.place}");
-
-                goCnt.GetComponentsInChildren<Transform>()[1].GetComponentsInChildren<Transform>()[1].GetComponent<Text>().text = mark.cnt;
-                goCnt.GetComponentsInChildren<Transform>()[1].GetComponentsInChildren<Transform>()[2].GetComponent<Text>().text = mark.login;
-                goCnt.GetComponentsInChildren<Transform>()[1].GetComponentsInChildren<Transform>()[3].GetComponent<Text>().text = mark._date;
-                goCnt.GetComponentsInChildren<Transform>()[1].GetComponentsInChildren<Transform>()[4].GetComponent<Text>().text = mark.place;
-                go.name = $"Mark_{mark.id}";
-                goCnt.name = $"Mark_Panel_{mark.id}";
-                //go.GetComponentsInChildren<Transform>()[1].GetComponent<Renderer>().enabled = true;
-                go.SetActive(true);
-                goCnt.transform.parent = GameObject.Find("Mark_Panels").transform;
-                goCnt.SetActive(false);
-                if (i == this.ARRAY_MARKS.Length - 1) temp.SetActive(false);
-                if (i == this.ARRAY_MARKS.Length - 1) tempCnt.SetActive(false);
-            }
-            catch (System.Exception e)
-            {
-                print(e);
-            }
-            
-            /*Transform[] allChildren = go.GetComponentsInChildren<Transform>();
-            foreach (Transform child in allChildren)
-            {
-                TextMeshPro textmeshPro = GetComponent<TextMeshPro>();
-                textmeshPro.SetText("The first number is {0} and the 2nd is {1:2} and the 3rd is {3:0}.", 4, 6.345f, 3.5f);
-                child.gameObject.GetComponent<TextMeshPro>().text = "Danya";
-                child.gameObject.GetComponent<Renderer>().enabled = true;
-                textmeshPro.gameObject.GetComponent<Renderer>().enabled = true;
-            }*/
-
-            //gameObject.GetComponent<Renderer>().enabled = true;
-            //go.AddComponent<DestroyAfterPosition>();
-
-            //GameObject tmp = Instantiate(Origin);
-            //tmp.transform.position = new Vector3(-1313.3f, 60.4f, -189.5f);
-            
+            GameObject go = Instantiate(this.templateMarkLabel, pos_building.getPosition(), templateMarkLabel.transform.rotation).gameObject;
+            go.GetComponentsInChildren<Transform>()[1].GetComponent<TextMeshPro>().SetText(mark.cnt);
+            go.GetComponentsInChildren<Transform>()[2].GetComponent<TextMeshPro>().SetText($"From: {mark.login}");
+            if (mark.marksCount > 1) go.GetComponentsInChildren<Transform>()[3].GetComponent<TextMeshPro>().SetText($"+{mark.marksCount}");
+            go.name = $"Mark_{mark.id}";
+            go.transform.parent = GameObject.Find("Mark_Labels").transform;
         }
+        
 
+        if (i == count - 1) this.templateMarkLabel.SetActive(false);
     }
-
-    public void Start()
+    public void renderMarkPanel(int count, int i, Mark mark, Dictionary<string, int> cors, Dictionary<string, int> corsCount)
     {
-        Debug.Log("Module Marks is works!");
+        GameObject goCnt = Instantiate(this.templateMarkPanel).gameObject;
+        goCnt.GetComponentsInChildren<Transform>()[1].GetComponentsInChildren<Transform>()[2].GetComponent<Text>().text = $"{mark.cnt}";
+        goCnt.GetComponentsInChildren<Transform>()[1].GetComponentsInChildren<Transform>()[3].GetComponent<Text>().text = $"From user: {mark.login}";
+        goCnt.GetComponentsInChildren<Transform>()[1].GetComponentsInChildren<Transform>()[4].GetComponent<Text>().text = $"Date: {mark._date}";
+        goCnt.GetComponentsInChildren<Transform>()[1].GetComponentsInChildren<Transform>()[5].GetComponent<Text>().text = $"Place: {mark.place}";
+        Dropdown tmp = goCnt.GetComponentsInChildren<Transform>()[1].GetComponentsInChildren<Transform>()[6].gameObject.GetComponent<Dropdown>();
+        /*if(mark.analogMarksAsCorpusName.Length > 0)
+            PopulateDropdown(tmp, mark.analogMarksAsCorpusName);*/
+        //print(mark.analogMarksAsCorpusName == null ? null : mark.analogMarksAsCorpusName);
+        goCnt.name = $"Mark_Panel_{mark.id}";
+        goCnt.transform.parent = GameObject.Find("Mark_Panels").transform;
+        
+        goCnt.SetActive(false);
+        if (i == count - 1) this.templateMarkPanel.SetActive(false);
     }
-
 }

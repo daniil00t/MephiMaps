@@ -1,5 +1,5 @@
-./Media
-./build
+Media
+build
 # Ignoring all except Unity/Mephi Maps/Assets/
 *
 !Unity
